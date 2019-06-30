@@ -4,8 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.typesafe.config.{Config, ConfigFactory}
-import kz.example.database.BookServiceImpl
-import kz.example.database.dao.BooksDAO
+import kz.example.repository.{BooksPostgreRepository, BooksRepository}
 import kz.example.routing.RestRoutes
 import org.slf4j.LoggerFactory
 import slick.jdbc.PostgresProfile.api._
@@ -26,24 +25,20 @@ object Boot extends App {
   val log = LoggerFactory.getLogger(Boot.getClass)
 
   val db = Database.forConfig("database.postgre")
-  val booksDAO = new BooksDAO()
-  val bookService = new BookServiceImpl(db, booksDAO)
+  val booksRepository: BooksRepository = new BooksPostgreRepository(db)
 
-  bookService.createSchemeIfNotExists().onComplete {
-    case Success(_) => {
-      log.info("Books scheme was created")
-    }
+  booksRepository.prepareRepository().onComplete {
+    case Success(_) => log.info("Books repository was successfully prepared")
 
-    case Failure(exception) => {
-      log.error("Failed to create books scheme with exception = {}", exception.toString)
+    case Failure(exception) =>
+      log.error("Failed to prepare books repository with exception = {}", exception.toString)
       throw exception
-    }
   }
 
-  val restRoutes = new RestRoutes(bookService)
+  val restRoutes = new RestRoutes(booksRepository)
 
-  val host = config.getString("rest.host")
-  val port = config.getInt("rest.port")
+  val host = config.getString("application.host")
+  val port = config.getInt("application.port")
   Http().bindAndHandle(restRoutes.route, host, port)
 
   log.info("{} ActorSystem started", actorSystemName)

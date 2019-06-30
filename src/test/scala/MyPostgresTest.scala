@@ -1,5 +1,5 @@
-import kz.example.database.dao.BooksDAO
-import kz.example.database.model.Book
+import kz.example.model.Book
+import kz.example.repository.{BooksPostgreRepository, BooksRepository}
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
@@ -12,22 +12,22 @@ class MyPostgresTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   implicit override val patienceConfig = PatienceConfig(timeout = Span(5, Seconds))
 
   var db: Database = _
-  var booksDAO: BooksDAO = _
+  var booksRepository: BooksRepository = _
 
   val bookId: Int = 101
   val bookForInsert = Book(bookId, "Harry Potter and the Prisoner of Azkaban", "J. K. Rowling")
   val bookForUpdate = Book(bookId, "Harry Potter and the Goblet of Fire", "J. K. Rowling")
 
-  def insertBook: Int = db.run(booksDAO.insert(bookForInsert)).futureValue
-  def updateBook: Int = db.run(booksDAO.update(bookForUpdate)).futureValue
+  def insertBook: Int = booksRepository.add(bookForInsert).futureValue
+  def updateBook: Int = booksRepository.update(bookForUpdate).futureValue
 
   before {
     db = Database.forConfig("database.postgre")
-    booksDAO = new BooksDAO
+    booksRepository = new BooksPostgreRepository(db)
   }
 
   test("Creating the Schema works") {
-    booksDAO.createSchemeIfNotExists()
+    booksRepository.prepareRepository()
 
     val tables = db.run(MTable.getTables).futureValue
     assert(tables.count(_.name.name.equalsIgnoreCase("books")) == 1)
@@ -39,7 +39,7 @@ class MyPostgresTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   }
 
   test("Selecting the Book works after insert operation") {
-    val result = db.run(booksDAO.select(bookId)).futureValue
+    val result = booksRepository.getBook(bookId).futureValue
     assert(result.head == bookForInsert)
   }
 
@@ -49,17 +49,17 @@ class MyPostgresTest extends FunSuite with BeforeAndAfter with ScalaFutures {
   }
 
   test("Selecting the Book works after update operation") {
-    val result = db.run(booksDAO.select(bookId)).futureValue
+    val result = booksRepository.getBook(bookId).futureValue
     assert(result.head == bookForUpdate)
   }
 
   test("Deleting the Book works") {
-    val result = db.run(booksDAO.delete(bookId)).futureValue
+    val result = booksRepository.deleteBook(bookId).futureValue
     assert(result == 1)
   }
 
   test("Selecting the Book works after delete operation") {
-    val result = db.run(booksDAO.select(bookId)).futureValue
+    val result = booksRepository.getBook(bookId).futureValue
     assert(result.isEmpty)
   }
 
