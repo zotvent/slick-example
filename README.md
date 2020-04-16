@@ -15,10 +15,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-This example uses `postgresql`. Firstly make sure a have one installed on your machine.
+This example uses `postgresql`. Firstly make sure to have one installed on your machine.
 
 
-After installing create database named `example`. Replace `user` and `password` values in `application.conf` file on your own.
+1. After installing create database named `example`. Replace `user` and `password` values in `application.conf` file on your own.
+2. In database `example` create schema named `slick`. If you want another schema name then you should change it in `kz.example.database.table.BooksTable` in definition of class `Books`
 
 ### Dependencies
 
