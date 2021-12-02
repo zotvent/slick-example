@@ -1,7 +1,6 @@
 package kz.example.component.impl
 
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import kz.example.component.{ActorSystemComponent, ConfigComponent}
 import kz.example.utils.Logging
 
@@ -12,7 +11,6 @@ trait ActorSystemComponentImpl extends ActorSystemComponent {
   private val actorSystemName: String = config.getString("akka.system.name")
 
   override implicit val actorSystem: ActorSystem = ActorSystem(actorSystemName)
-  override implicit val materializer: ActorMaterializer = ActorMaterializer()
   override implicit val executionContext: ExecutionContext = actorSystem.dispatcher
 
   log.info("{} ActorSystem started", actorSystemName)

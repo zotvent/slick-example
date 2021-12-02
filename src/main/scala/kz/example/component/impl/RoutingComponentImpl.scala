@@ -12,5 +12,5 @@ trait RoutingComponentImpl extends RoutingComponent {
   private val host = config.getString("application.host")
   private val port = config.getInt("application.port")
 
-  Http().bindAndHandle(restRoutes.route, host, port)
+  Http().newServerAt(host, port).bind(restRoutes.route)
 }
