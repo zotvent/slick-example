@@ -4,7 +4,7 @@ import kz.example.component.impl._
 import kz.example.utils.Logging
 
 object Boot
-  extends App
+    extends App
     with Logging
     with ConfigComponentImpl
     with ActorSystemComponentImpl

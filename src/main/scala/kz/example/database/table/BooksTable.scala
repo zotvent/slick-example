@@ -4,7 +4,6 @@ import kz.example.model.Book
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape
 
-
 trait BooksTable {
 
   class Books(tag: Tag) extends Table[Book](tag, Some("book_store"), "books") {
@@ -12,7 +11,8 @@ trait BooksTable {
     def name: Rep[String] = column[String]("name")
     def author: Rep[String] = column[String]("author")
 
-    def * : ProvenShape[Book] = (id, name, author) <> (Book.tupled, Book.unapply)
+    def * : ProvenShape[Book] =
+      (id, name, author) <> (Book.tupled, Book.unapply)
 
   }
 

@@ -7,14 +7,13 @@ import kz.example.utils.Serializers
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration._
 
-
 trait PerRequestActor
-  extends Actor
+    extends Actor
     with ActorLogging
     with Serializers
     with PerRequest {
 
-  context.setReceiveTimeout(60 seconds)
+  context.setReceiveTimeout(60.seconds)
 
   implicit val ec: ExecutionContextExecutor = context.dispatcher
 

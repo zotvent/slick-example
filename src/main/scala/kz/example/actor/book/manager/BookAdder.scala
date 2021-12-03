@@ -7,7 +7,6 @@ import kz.example.repository.BooksRepository
 
 import scala.util.{Failure, Success}
 
-
 trait BookAdder {
   this: PerRequestActor =>
 
@@ -15,7 +14,7 @@ trait BookAdder {
 
   def booksRepository: BooksRepository
 
-  def addBook(request: AddBook): Unit = {
+  def addBook(request: AddBook): Unit =
     booksRepository.add(request.book).onComplete {
       case Success(value) =>
         log.debug("Successfully added book")
@@ -23,8 +22,10 @@ trait BookAdder {
 
       case Failure(exception) =>
         log.error("Got exception while adding book = {}", exception.toString)
-        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
-      }
-  }
+        complete(
+          ErrorMessages.INTERNAL_SERVER_ERROR,
+          StatusCodes.InternalServerError
+        )
+    }
 
 }

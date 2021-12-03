@@ -10,8 +10,10 @@ trait ActorSystemComponentImpl extends ActorSystemComponent {
   this: ConfigComponent with Logging =>
   private val actorSystemName: String = config.getString("akka.system.name")
 
-  override implicit val actorSystem: ActorSystem = ActorSystem(actorSystemName)
-  override implicit val executionContext: ExecutionContext = actorSystem.dispatcher
+  implicit override val actorSystem: ActorSystem = ActorSystem(actorSystemName)
+
+  implicit override val executionContext: ExecutionContext =
+    actorSystem.dispatcher
 
   log.info("{} ActorSystem started", actorSystemName)
 

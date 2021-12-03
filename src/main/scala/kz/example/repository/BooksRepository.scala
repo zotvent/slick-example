@@ -4,7 +4,6 @@ import kz.example.model.Book
 
 import scala.concurrent.Future
 
-
 trait BooksRepository {
   def add(book: Book): Future[Int]
   def update(book: Book): Future[Int]

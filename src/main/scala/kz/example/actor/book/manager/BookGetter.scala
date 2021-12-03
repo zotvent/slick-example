@@ -8,7 +8,6 @@ import kz.example.repository.BooksRepository
 
 import scala.util.{Failure, Success}
 
-
 trait BookGetter {
   this: PerRequestActor =>
 
@@ -16,7 +15,7 @@ trait BookGetter {
 
   def booksRepository: BooksRepository
 
-  def getBook(request: GetBook): Unit = {
+  def getBook(request: GetBook): Unit =
     booksRepository.getBook(request.bookId).onComplete {
       case Success(value) =>
         log.debug("Successfully got book")
@@ -24,16 +23,17 @@ trait BookGetter {
 
       case Failure(exception) =>
         log.error("Got exception while getting book = {}", exception.toString)
-        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
+        complete(
+          ErrorMessages.INTERNAL_SERVER_ERROR,
+          StatusCodes.InternalServerError
+        )
     }
-  }
 
-  private def prepareResponse(books: Seq[Book]): Unit = {
+  private def prepareResponse(books: Seq[Book]): Unit =
     if (books.isEmpty) {
       complete(ErrorMessages.BOOK_NOT_FOUND, StatusCodes.NotFound)
     } else {
       complete(books.head, StatusCodes.OK)
     }
-  }
 
 }

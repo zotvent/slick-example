@@ -8,13 +8,13 @@ import kz.example.repository.BooksRepository
 
 import scala.concurrent.Promise
 
-
 object BookManager {
 
-  def props(booksRepository: BooksRepository,
-            requestContext: RequestContext,
-            promise: Promise[RouteResult]): Props =
-    Props(new BookManager(booksRepository, requestContext, promise))
+  def props(
+      booksRepository: BooksRepository,
+      requestContext: RequestContext,
+      promise: Promise[RouteResult]
+  ): Props = Props(new BookManager(booksRepository, requestContext, promise))
 
   sealed trait BookRequest
 
@@ -25,11 +25,11 @@ object BookManager {
 
 }
 
-
-class BookManager(val booksRepository: BooksRepository,
-                  val requestContext: RequestContext,
-                  val promise: Promise[RouteResult])
-  extends PerRequestActor
+class BookManager(
+    val booksRepository: BooksRepository,
+    val requestContext: RequestContext,
+    val promise: Promise[RouteResult]
+) extends PerRequestActor
     with BookAdder
     with BookGetter
     with BookUpdater
@@ -37,10 +37,9 @@ class BookManager(val booksRepository: BooksRepository,
 
   import BookManager._
 
-  override def receive: Receive = {
-    case request: BookRequest =>
-      log.info("Received BookRequest = {}", request)
-      handle(request)
+  override def receive: Receive = { case request: BookRequest =>
+    log.info("Received BookRequest = {}", request)
+    handle(request)
   }
 
   def handle(request: BookRequest): Unit = request match {

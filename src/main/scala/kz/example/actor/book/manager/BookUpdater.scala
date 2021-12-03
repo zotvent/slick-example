@@ -8,7 +8,6 @@ import kz.example.repository.BooksRepository
 
 import scala.util.{Failure, Success}
 
-
 trait BookUpdater {
   this: PerRequestActor =>
 
@@ -16,7 +15,7 @@ trait BookUpdater {
 
   def booksRepository: BooksRepository
 
-  def updateBook(request: UpdateBook): Unit = {
+  def updateBook(request: UpdateBook): Unit =
     booksRepository.update(request.book).onComplete {
       case Success(value) =>
         log.debug("Successfully updated book")
@@ -24,14 +23,21 @@ trait BookUpdater {
 
       case Failure(exception) =>
         log.error("Got exception while removing book = {}", exception.toString)
-        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
+        complete(
+          ErrorMessages.INTERNAL_SERVER_ERROR,
+          StatusCodes.InternalServerError
+        )
     }
-  }
 
-  private def prepareResponse(response: Int, book: Book): Unit = response match {
-    case 0 => complete(ErrorMessages.BOOK_NOT_FOUND, StatusCodes.NotFound)
-    case 1 => complete(book, StatusCodes.OK)
-    case _ => complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
-  }
+  private def prepareResponse(response: Int, book: Book): Unit =
+    response match {
+      case 0 => complete(ErrorMessages.BOOK_NOT_FOUND, StatusCodes.NotFound)
+      case 1 => complete(book, StatusCodes.OK)
+      case _ =>
+        complete(
+          ErrorMessages.INTERNAL_SERVER_ERROR,
+          StatusCodes.InternalServerError
+        )
+    }
 
 }

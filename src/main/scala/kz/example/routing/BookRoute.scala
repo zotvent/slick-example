@@ -12,30 +12,28 @@ import kz.example.utils.Serializers
 
 import scala.concurrent.Promise
 
-
-class BookRoute(booksRepository: BooksRepository)
-               (implicit system: ActorSystem)
-  extends Serializers {
+class BookRoute(booksRepository: BooksRepository)(implicit system: ActorSystem)
+    extends Serializers {
 
   val route: Route = pathPrefix("books") {
     path(IntNumber) { bookId =>
       get {
         handleBook(BookManager.GetBook(bookId))
       } ~
-      delete {
-        handleBook(BookManager.DeleteBook(bookId))
-      }
+        delete {
+          handleBook(BookManager.DeleteBook(bookId))
+        }
     } ~
-    pathEndOrSingleSlash {
-      entity(as[Book]) { book =>
-        post {
-          handleBook(BookManager.AddBook(book))
-        } ~
-        put {
-          handleBook(BookManager.UpdateBook(book))
+      pathEndOrSingleSlash {
+        entity(as[Book]) { book =>
+          post {
+            handleBook(BookManager.AddBook(book))
+          } ~
+            put {
+              handleBook(BookManager.UpdateBook(book))
+            }
         }
       }
-    }
   }
 
   private def handleBook(request: BookManager.BookRequest): Route = ctx => {

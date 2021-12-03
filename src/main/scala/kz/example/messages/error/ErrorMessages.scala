@@ -1,6 +1,5 @@
 package kz.example.messages.error
 
-
 object ErrorMessages {
 
   final val INTERNAL_SERVER_ERROR = "There was some internal server error"
