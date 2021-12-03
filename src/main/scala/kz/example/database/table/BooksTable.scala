@@ -7,7 +7,7 @@ import slick.lifted.ProvenShape
 
 trait BooksTable {
 
-  class Books(tag: Tag) extends Table[Book](tag, Some("slick"), "books") {
+  class Books(tag: Tag) extends Table[Book](tag, Some("book_store"), "books") {
     def id: Rep[Int] = column[Int]("id", O.PrimaryKey)
     def name: Rep[String] = column[String]("name")
     def author: Rep[String] = column[String]("author")

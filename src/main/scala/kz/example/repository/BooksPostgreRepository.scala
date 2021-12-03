@@ -37,10 +37,4 @@ class BooksPostgreRepository(db: Database)
     )
   }
 
-  override def prepareRepository(): Future[Unit] = {
-    db.run(
-      books.schema.createIfNotExists
-    )
-  }
-
 }
