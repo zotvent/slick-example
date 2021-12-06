@@ -1,4 +1,4 @@
-package kz.example.database.table
+package kz.example.model.db
 
 import kz.example.model.entity.Book
 import slick.jdbc.PostgresProfile.api._

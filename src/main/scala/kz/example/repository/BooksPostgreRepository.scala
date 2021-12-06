@@ -1,6 +1,6 @@
 package kz.example.repository
 
-import kz.example.database.table.BooksTable
+import kz.example.model.db.BooksTable
 import kz.example.model.entity.Book
 import slick.jdbc.PostgresProfile.api._
 
