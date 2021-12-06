@@ -1,6 +1,6 @@
 package kz.example.repository
 
-import kz.example.model.Book
+import kz.example.model.entity.Book
 
 import scala.concurrent.Future
 

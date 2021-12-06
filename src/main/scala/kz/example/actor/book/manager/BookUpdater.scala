@@ -3,7 +3,7 @@ package kz.example.actor.book.manager
 import akka.http.scaladsl.model.StatusCodes
 import kz.example.actor.PerRequestActor
 import kz.example.messages.error.ErrorMessages
-import kz.example.model.Book
+import kz.example.model.entity.Book
 import kz.example.repository.BooksRepository
 
 import scala.util.{Failure, Success}

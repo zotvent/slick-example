@@ -3,7 +3,7 @@ package kz.example.actor.book.manager
 import akka.actor.Props
 import akka.http.scaladsl.server.{RequestContext, RouteResult}
 import kz.example.actor.PerRequestActor
-import kz.example.model.Book
+import kz.example.model.entity.Book
 import kz.example.repository.BooksRepository
 
 import scala.concurrent.Promise

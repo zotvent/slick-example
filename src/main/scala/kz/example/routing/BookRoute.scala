@@ -6,7 +6,7 @@ import akka.http.scaladsl.server.directives.MethodDirectives.get
 import akka.http.scaladsl.server.directives.PathDirectives.path
 import akka.http.scaladsl.server.{Route, RouteResult}
 import kz.example.actor.book.manager.BookManager
-import kz.example.model.Book
+import kz.example.model.entity.Book
 import kz.example.repository.BooksRepository
 import kz.example.utils.Serializers
 
