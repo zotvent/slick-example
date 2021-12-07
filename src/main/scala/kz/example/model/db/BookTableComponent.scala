@@ -5,6 +5,7 @@ import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape
 
 object BookTableComponent {
+  type BookId = Int
 
   def apply(profile: JdbcProfile): BookTableComponent = new BookTableComponent(profile)
 
@@ -12,10 +13,11 @@ object BookTableComponent {
 
 class BookTableComponent(val profile: JdbcProfile) {
 
+  import BookTableComponent.BookId
   import profile.api._
 
   class BookTable(tag: Tag) extends Table[Book](tag, Some("book_store"), "books") {
-    def id: Rep[Int] = column[Int]("id", O.PrimaryKey)
+    def id: Rep[BookId] = column[BookId]("id", O.PrimaryKey)
     def name: Rep[String] = column[String]("name")
     def author: Rep[String] = column[String]("author")
 

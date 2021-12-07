@@ -1,3 +1,5 @@
 package kz.example.model.entity
 
-case class Book(id: Int, name: String, author: String)
+import kz.example.model.db.BookTableComponent.BookId
+
+case class Book(id: BookId, name: String, author: String)
