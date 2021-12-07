@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.StatusCodes
 import kz.example.actor.PerRequestActor
 import kz.example.messages.error.ErrorMessages
 import kz.example.model.entity.Book
-import kz.example.repository.BooksRepository
+import kz.example.model.repository.BookRepository
 
 import scala.util.{Failure, Success}
 
@@ -13,20 +13,17 @@ trait BookUpdater {
 
   import BookManager.UpdateBook
 
-  def booksRepository: BooksRepository
+  def bookRepository: BookRepository
 
   def updateBook(request: UpdateBook): Unit =
-    booksRepository.update(request.book).onComplete {
+    bookRepository.update(request.book).onComplete {
       case Success(value) =>
         log.debug("Successfully updated book")
         prepareResponse(value, request.book)
 
       case Failure(exception) =>
         log.error("Got exception while removing book = {}", exception.toString)
-        complete(
-          ErrorMessages.INTERNAL_SERVER_ERROR,
-          StatusCodes.InternalServerError
-        )
+        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
     }
 
   private def prepareResponse(response: Int, book: Book): Unit =
@@ -34,10 +31,7 @@ trait BookUpdater {
       case 0 => complete(ErrorMessages.BOOK_NOT_FOUND, StatusCodes.NotFound)
       case 1 => complete(book, StatusCodes.OK)
       case _ =>
-        complete(
-          ErrorMessages.INTERNAL_SERVER_ERROR,
-          StatusCodes.InternalServerError
-        )
+        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
     }
 
 }

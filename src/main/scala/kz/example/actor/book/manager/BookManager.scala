@@ -4,17 +4,15 @@ import akka.actor.Props
 import akka.http.scaladsl.server.{RequestContext, RouteResult}
 import kz.example.actor.PerRequestActor
 import kz.example.model.entity.Book
-import kz.example.repository.BooksRepository
+import kz.example.model.repository.BookRepository
 
 import scala.concurrent.Promise
 
 object BookManager {
 
-  def props(
-      booksRepository: BooksRepository,
-      requestContext: RequestContext,
-      promise: Promise[RouteResult]
-  ): Props = Props(new BookManager(booksRepository, requestContext, promise))
+  def props(bookRepository: BookRepository, requestContext: RequestContext, promise: Promise[RouteResult]): Props = Props(
+    new BookManager(bookRepository, requestContext, promise)
+  )
 
   sealed trait BookRequest
 
@@ -25,11 +23,8 @@ object BookManager {
 
 }
 
-class BookManager(
-    val booksRepository: BooksRepository,
-    val requestContext: RequestContext,
-    val promise: Promise[RouteResult]
-) extends PerRequestActor
+class BookManager(val bookRepository: BookRepository, val requestContext: RequestContext, val promise: Promise[RouteResult])
+    extends PerRequestActor
     with BookAdder
     with BookGetter
     with BookUpdater

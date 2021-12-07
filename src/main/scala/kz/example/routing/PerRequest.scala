@@ -19,18 +19,13 @@ trait PerRequest {
   def requestContext: RequestContext
   def promise: Promise[RouteResult]
 
-  def complete(
-      response: => ToResponseMarshallable,
-      statusCode: StatusCode
-  ): Unit = {
+  def complete(response: => ToResponseMarshallable, statusCode: StatusCode): Unit = {
     val f = requestContext.complete(response)
 
     f.onComplete { res =>
       val routeResult: Try[RouteResult] = res match {
         case scala.util.Success(value: Complete) =>
-          Success(
-            value.copy(response = value.response.withStatus(statusCode))
-          )
+          Success(value.copy(response = value.response.withStatus(statusCode)))
 
         case _ => res
       }
@@ -40,10 +35,7 @@ trait PerRequest {
     context.stop(self)
   }
 
-  def complete(
-      response: => ToResponseMarshallable,
-      errorCode: ErrorCode
-  ): Unit =
+  def complete(response: => ToResponseMarshallable, errorCode: ErrorCode): Unit =
     complete(response, errorCode.statusCode)
 
 }
