@@ -18,6 +18,7 @@ object BookManager {
 
   case class AddBook(book: Book) extends BookRequest
   case class GetBook(bookId: Int) extends BookRequest
+  case class GetBooks(limit: Int, offset: Int) extends BookRequest
   case class UpdateBook(book: Book) extends BookRequest
   case class DeleteBook(bookId: Int) extends BookRequest
 
@@ -40,6 +41,7 @@ class BookManager(val bookRepository: BookRepository, val requestContext: Reques
   def handle(request: BookRequest): Unit = request match {
     case s: AddBook => addBook(s)
     case s: GetBook => getBook(s)
+    case s: GetBooks => getBooks(s)
     case s: UpdateBook => updateBook(s)
     case s: DeleteBook => deleteBook(s)
   }

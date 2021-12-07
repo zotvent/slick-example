@@ -11,7 +11,7 @@ import scala.util.{Failure, Success}
 trait BookGetter {
   this: PerRequestActor =>
 
-  import BookManager.GetBook
+  import BookManager.{GetBook, GetBooks}
 
   def bookRepository: BookRepository
 
@@ -23,6 +23,17 @@ trait BookGetter {
 
       case Failure(exception) =>
         log.error("Got exception while getting book = {}", exception.toString)
+        complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
+    }
+
+  def getBooks(request: GetBooks): Unit =
+    bookRepository.all(request.limit, request.offset).onComplete {
+      case Success(value) =>
+        log.debug("Successfully got books")
+        complete(value, StatusCodes.OK)
+
+      case Failure(exception) =>
+        log.error("Got exception while getting books = {}", exception.toString)
         complete(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.InternalServerError)
     }
 

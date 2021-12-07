@@ -15,24 +15,37 @@ import scala.concurrent.Promise
 class BookRoute(bookRepository: BookRepository)(implicit system: ActorSystem) extends Serializers {
 
   val route: Route = pathPrefix("books") {
-    path(IntNumber) { bookId =>
-      get {
-        handleBook(BookManager.GetBook(bookId))
-      } ~
-        delete {
-          handleBook(BookManager.DeleteBook(bookId))
-        }
-    } ~
+    concat(
+      path(IntNumber) { bookId =>
+        concat(
+          get {
+            handleBook(BookManager.GetBook(bookId))
+          },
+          delete {
+            handleBook(BookManager.DeleteBook(bookId))
+          }
+        )
+      },
       pathEndOrSingleSlash {
-        entity(as[Book]) { book =>
-          post {
-            handleBook(BookManager.AddBook(book))
-          } ~
-            put {
-              handleBook(BookManager.UpdateBook(book))
+        concat(
+          entity(as[Book]) { book =>
+            concat(
+              post {
+                handleBook(BookManager.AddBook(book))
+              },
+              put {
+                handleBook(BookManager.UpdateBook(book))
+              }
+            )
+          },
+          get {
+            parameters('limit ? 20, 'offset ? 0) { (limit, offset) =>
+              handleBook(BookManager.GetBooks(limit, offset))
             }
-        }
+          }
+        )
       }
+    )
   }
 
   private def handleBook(request: BookManager.BookRequest): Route = ctx => {
