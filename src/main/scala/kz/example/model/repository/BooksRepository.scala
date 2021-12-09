@@ -1,7 +1,9 @@
 package kz.example.model.repository
 
 import kz.example.model.db.BookTableComponent
+import kz.example.model.db.BookTableComponent.BookId
 import kz.example.model.entity.Book
+import kz.example.utils.Exceptions.NotFoundException
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
@@ -19,6 +21,8 @@ object BookRepository {
 
   def apply(db: Database, profile: JdbcProfile) =
     new BookRepository(db, profile)
+
+  case class BookNotFoundException(id: BookId) extends NotFoundException(s"Book [id=$id] not found")
 }
 
 class BookRepository(db: Database, profile: JdbcProfile) extends BookRepositoryComponent {

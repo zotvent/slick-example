@@ -1,7 +1,8 @@
 package kz.example
 
 import kz.example.component.impl._
-import kz.example.utils.Logging
+import kz.example.http.{HttpRoute, HttpRoutingService}
+import kz.example.utils.{Logging, Serializers}
 
 object Boot
     extends App
@@ -10,4 +11,7 @@ object Boot
     with ActorSystemComponentImpl
     with DatabaseComponentImpl
     with RepositoriesImpl
+    with Serializers
+    with HttpRoute
+    with HttpRoutingService
     with RoutingComponentImpl

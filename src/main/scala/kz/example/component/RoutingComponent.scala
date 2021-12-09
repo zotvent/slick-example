@@ -1,7 +1,7 @@
 package kz.example.component
 
-import kz.example.routing.RestRoutes
+import kz.example.http.HttpRoute
 
 trait RoutingComponent {
-  def restRoutes: RestRoutes
+  this: HttpRoute =>
 }
