@@ -27,7 +27,7 @@ object BookRepository {
 
 class BookRepository(db: Database, profile: JdbcProfile) extends BookRepositoryComponent {
 
-  private val table = new BookTableComponent(profile)
+  private val table = BookTableComponent(profile)
 
   import profile.api._
   import table.bookQuery
