@@ -2,6 +2,7 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE DATABASE slick_example_test;
     CREATE SCHEMA book_store;
 
     CREATE TABLE IF NOT EXISTS book_store.books
