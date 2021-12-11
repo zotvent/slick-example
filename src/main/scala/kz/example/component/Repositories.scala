@@ -1,7 +1,7 @@
 package kz.example.component
 
-import kz.example.model.repository.BookRepository
+import kz.example.model.repository.BookRepositoryComponent
 
 trait Repositories {
-  def bookRepository: BookRepository
+  def bookRepository: BookRepositoryComponent
 }
