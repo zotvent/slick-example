@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  postgresql:
+    image: mdillon/postgis:9.6-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: slick_example
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/
